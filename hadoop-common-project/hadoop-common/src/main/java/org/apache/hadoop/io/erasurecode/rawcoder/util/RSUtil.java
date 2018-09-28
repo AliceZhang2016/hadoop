@@ -74,6 +74,69 @@ public final class RSUtil {
       }
     }
   }
+  
+  public static void genCauchyMatrixForLRC(byte[] a, int m, int k) {
+    // Identity matrix in high position
+    for (int i = 0; i < k; i++) {
+      a[k * i + i] = 1;
+    }
+
+    // For the rest choose 1/(i + j) | i != j
+    /*
+    int pos = k * k;
+    for (int i = k; i < m; i++) {
+      for (int j = 0; j < k; j++) {
+        a[pos++] = GF256.gfInv((byte) (i ^ j));
+      }
+    }
+    */
+    int pos = k*k
+    // data: k   parity: n    all: m (=k+n)
+    // number of parity
+    n = m - k;
+
+    // initial set
+    globalParity = 1;
+    localParity = n-1;
+
+    if localParity>k: // #localParity > #(data disk)
+      localParity = k;
+      globalParity = n-k;
+      for (int i = 0; i < pos; i++){ // identity matrix once more
+        a[pos+i] = a[i];
+      }
+      // For the rest, use GF
+      pos = pos*2 // = k*k*2
+      for (int i = 2*k; i < m; i++) {
+        for (int j = 0; j < k; j++) {
+          a[pos++] = GF256.gfInv((byte) (i ^ j));
+        }
+      }
+    else:
+      // one global parity
+      for (int j = 0; j < k; j++){
+        a[pos++] = GF256.gfInv((byte)((m-1) ^ j))
+      }
+      forEachLocal = k / n; // 13/3=4
+      tempPos = 0  // localParity = 3
+      for (int i = 0; i < localParity; i++){
+        tempPos = i * forEachLocal
+        if (i == localParity - 1)
+          oneNum = forEachLocal + k % localParity // 4+1=5
+        else{
+          oneNum = forEachLocal
+        }
+        for (int j = 0; j < tempPos; j += 1){
+          a[pos++] = 0
+        }
+        for (int j = tempPos; j < tempPos + oneNum; j += 1){
+          a[pos++] = 1
+        }
+        for (int j = tempPos + oneNum; j < k; j += 1){
+          a[pos++] = 0
+        }
+      }
+  }
 
   /**
    * Encode a group of inputs data and generate the outputs. It's also used for
