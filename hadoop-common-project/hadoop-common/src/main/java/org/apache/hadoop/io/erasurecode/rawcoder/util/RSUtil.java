@@ -90,7 +90,7 @@ public final class RSUtil {
       }
     }
     */
-    int pos = k*k
+    int pos = k*k;
     // data: k   parity: n    all: m (=k+n)
     // number of parity
     n = m - k;
@@ -115,25 +115,25 @@ public final class RSUtil {
     else:
       // one global parity
       for (int j = 0; j < k; j++){
-        a[pos++] = GF256.gfInv((byte)((m-1) ^ j))
+        a[pos++] = GF256.gfInv((byte)((m-1) ^ j));
       }
       forEachLocal = k / n; // 13/3=4
-      tempPos = 0  // localParity = 3
+      tempPos = 0;  // localParity = 3
       for (int i = 0; i < localParity; i++){
-        tempPos = i * forEachLocal
+        tempPos = i * forEachLocal;
         if (i == localParity - 1)
-          oneNum = forEachLocal + k % localParity // 4+1=5
+          oneNum = forEachLocal + k % localParity; // 4+1=5
         else{
-          oneNum = forEachLocal
+          oneNum = forEachLocal;
         }
         for (int j = 0; j < tempPos; j += 1){
-          a[pos++] = 0
+          a[pos++] = 0;
         }
         for (int j = tempPos; j < tempPos + oneNum; j += 1){
-          a[pos++] = 1
+          a[pos++] = 1;
         }
         for (int j = tempPos + oneNum; j < k; j += 1){
-          a[pos++] = 0
+          a[pos++] = 0;
         }
       }
   }
