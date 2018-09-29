@@ -99,7 +99,7 @@ public final class RSUtil {
     globalParity = 1;
     localParity = n-1;
 
-    if localParity>k: // #localParity > #(data disk)
+    if (localParity>k){ // #localParity > #(data disk)
       localParity = k;
       globalParity = n-k;
       for (int i = 0; i < pos; i++){ // identity matrix once more
@@ -112,17 +112,19 @@ public final class RSUtil {
           a[pos++] = GF256.gfInv((byte) (i ^ j));
         }
       }
-    else:
+    }
+    else{
       // one global parity
       for (int j = 0; j < k; j++){
         a[pos++] = GF256.gfInv((byte)((m-1) ^ j));
       }
-      forEachLocal = k / n; // 13/3=4
+      forEachLocal = k / localParity; // 13/3=4
       tempPos = 0;  // localParity = 3
       for (int i = 0; i < localParity; i++){
         tempPos = i * forEachLocal;
-        if (i == localParity - 1)
+        if (i == localParity - 1){
           oneNum = forEachLocal + k % localParity; // 4+1=5
+        }
         else{
           oneNum = forEachLocal;
         }
@@ -136,6 +138,7 @@ public final class RSUtil {
           a[pos++] = 0;
         }
       }
+    }
   }
 
   /**
